@@ -264,12 +264,16 @@ def cnn(train_i, train_o, test_i, test_o, mod):
 
     X_train = np.array(train_i)
     Y_train = np.array(train_o)
-
+    if K.image_dim_ordering() == 'th':
+        input_shape = (1, 2, 128)
+    else:
+        input_shape = (2, 128, 1)
+        X_train = X_train.reshape(X_train.shape[0], 2, 128, 1)
     model = Sequential()
     model.add(Convolution2D(c1, 1, 3,
                             #subsample=(1, 1),
                             #border_mode='valid',
-                            input_shape=(1, 2, 128)))
+                            input_shape=input_shape))
                             #W_regularizer = l2(.01))) #,W_constraint = MaxNorm(2)))
     model.add(Activation('relu'))
     model.add(Convolution2D(c2, 2, 3)) #W_regularizer = l2(.01))) #,W_constraint = MaxNorm(2)))
