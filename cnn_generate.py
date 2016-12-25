@@ -323,8 +323,10 @@ def cnn(train_i, train_o, test_i, test_o, mod):
     model.fit(X_train, Y_train, batch_size=1024, nb_epoch=nb_epoch,
             verbose=1,shuffle=True, validation_split=0.1, callbacks=[tb]) #validation_data=(np.array(test_i[18]), np.array(test_o[18])))
     
-    for s in sorted(test_i):
+    for s in sorted(test_i): 
         X_test = np.array(test_i[s])
+        if not K.image_dim_ordering() == 'th':
+            X_test = X_test.reshape(X_test.shape[0], 2, 128, 1)
         Y_test = np.array(test_o[s])
         score = model.evaluate(X_test, Y_test, verbose=0)
         print("SNR", s, "Test accuracy:", score[1])
